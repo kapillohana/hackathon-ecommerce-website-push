@@ -75,7 +75,7 @@ const HomePage = () => {
 
     <div className="flex flex-col items-center w-full sm:w-[48%] md:w-[30%] lg:w-[22%]">
       <Image
-        src="/images/pic3.png"
+        src="/images/bedroom.png"
         alt="display3"
         className=" rounded-xl w-full h-auto"
         layout="responsive"
@@ -100,14 +100,14 @@ const HomePage = () => {
 
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     {[
-      { id: 1, name: "Syltherine", description: "Stylish cafe chair", image: "/images/images.png", price: 3500, discountPrice: 2500.000, discount: "-30%" },
-      { id: 2, name: "Bedroom Lamp", description: "Elegant night lamp", image: "/images/image1.png", price: 1200, discountPrice: 840.000, discount: "-30%" },
-      { id: 3, name: "Lotilo", description: "Luxury Big Sofa", image: "/images/image (21).png", price: 8000, discountPrice: 5600.000, discount: "-30%" },
-      { id: 4, name: "Respira", description: "Outdoor bar table and stool", image: "/images/image (22).png", discountPrice: 1750.000, discount: "New" },
-      { id: 5, name: "Grifo", description: "Night lamp", image: "/images/image (16).png", discountPrice: 1500.000, discount: "New"},
-      { id: 6, name: "Muggo", description: "Small mug", image: "/images/image (23).png",  discountPrice: 150.000, discount: "New" },
-      { id: 7, name: "Pingky", description: "Cute bed set", image: "/images/image1.png", price: 14000, discountPrice: 7000.000, discount: "-50%" },
-      { id: 8, name: "Potty", description: "Minimalist flower pot", image: "/images/image (17).png", discountPrice: 500, discount: "New" ,},
+      { id: 1, name: "Syltherine", description: "Stylish cafe chair", image: "/images/product1.png", price: 3500, discountPrice: 2500.000, discount: "-30%" },
+      { id: 2, name: "Bedroom Lamp", description: "Elegant night lamp", image: "/images/product2.png", price: 1200, discountPrice: 840.000, discount: "-30%" },
+      { id: 3, name: "Lotilo", description: "Luxury Big Sofa", image: "/images/product3.png", price: 8000, discountPrice: 5600.000, discount: "-30%" },
+      { id: 4, name: "Respira", description: "Outdoor bar table and stool", image: "/images/product4.png", discountPrice: 1750.000, discount: "New" },
+      { id: 5, name: "Grifo", description: "Night lamp", image: "/images/product5.png", discountPrice: 1500.000, discount: "New"},
+      { id: 6, name: "Muggo", description: "Small mug", image: "/images/product6.png",  discountPrice: 150.000, discount: "New" },
+      { id: 7, name: "Pingky", description: "Cute bed set", image: "/images/product7.png", price: 14000, discountPrice: 7000.000, discount: "-50%" },
+      { id: 8, name: "Potty", description: "Minimalist flower pot", image: "/images/product1.png", discountPrice: 500, discount: "New" ,},
     ].map((product) => (
       <div
         key={product.id}

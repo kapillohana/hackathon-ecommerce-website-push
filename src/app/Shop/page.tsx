@@ -54,22 +54,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 const Shop = () => {
   const productImages = [
-    '/images/gallery1 (1).png',
-    '/images/gallery1 (2).png',
-    '/images/gallery1 (3).png',
-    '/images/gallery1 (4).png',
-    '/images/gallery1 (5).png',
-    '/images/gallery1 (6).png',
-    '/images/gallery1 (7).png',
-    '/images/gallery1 (8).png',
-    '/images/gallery1 (8).png',
-    '/images/gallery1 (1).png',
-    '/images/gallery1 (2).png',
-    '/images/gallery1 (132).png',
-    '/images/gallery1 (4).png',
-    '/images/gallery1 (5).png',
-    '/images/gallery1 (6).png',
-    '/images/gallery1 (7).png',
+    '/images/product1.png',
+    '/images/product2.png',
+    '/images/product3.png',
+    '/images/product4.png',
+    '/images/product1.png',
+    '/images/product2.png',
+    '/images/product3.png',
+    '/images/product4.png',
+    '/images/product1.png',
+    '/images/product2.png',
+    '/images/product3.png',
+    '/images/product4.png',
+    '/images/product1.png',
+    '/images/product2.png',
+    '/images/product3.png',
+    '/images/product4.png',
+   
   ];
 
   return (
