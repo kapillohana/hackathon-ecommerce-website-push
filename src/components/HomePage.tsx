@@ -5,6 +5,7 @@ import { MdOutlineCompareArrows } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import ForthSection from "./FourthSection";
 import FifthSection from "./FifthSection";
+import Link from "next/link";
 
 
 
@@ -47,7 +48,7 @@ const HomePage = () => {
   <div className="flex flex-wrap justify-center gap-5 pt-[2.5rem]">
     <div className="flex flex-col items-center w-full sm:w-[48%] md:w-[30%] lg:w-[22%]">
       <Image
-        src="/images/Pic1.png"
+        src="/images/pic1.png"
         alt="display1"
         className=" rounded-xl w-full h-auto"
         layout="responsive"
@@ -160,8 +161,11 @@ const HomePage = () => {
       </div>
     ))}
   </div>
-  <button className="bg-transparent text-[#FF7A28] text-base font-semibold px-14 mt-8 py-2 border border-[#FF7A28] hover hover:bg-[#FF7A28] hover:text-white ">Show More</button>
-</div>
+  <Link href="/Shop">
+      <button className="bg-transparent text-[#FF7A28] text-base font-semibold px-14 mt-8 py-2 border border-[#FF7A28] hover:bg-[#FF7A28] hover:text-white">
+        Show More
+      </button>
+    </Link></div>
 
 {/* Fourth Section */}
 <ForthSection />
