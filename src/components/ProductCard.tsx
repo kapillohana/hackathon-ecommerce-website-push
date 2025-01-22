@@ -1,13 +1,13 @@
 import Image from 'next/image';
 
-// Define the type for the props
 interface ProductCardProps {
   title: string;
   description: string;
   price: string;
   oldPrice?: string; // Optional prop
   discount?: string; // Optional prop
-  badge?: string;    // Optional prop
+  badge?: string;
+  imageSrc: string; // Prop for image source
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -17,15 +17,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   oldPrice,
   discount,
   badge,
+  imageSrc, // Use the imageSrc prop
 }) => {
   return (
-    <div className="border p-4 rounded-lg shadow hover:shadow-lg transition">
-      <div className="relative">
+    <div className="border p-4 rounded-lg shadow hover:shadow-lg transition h-full flex flex-col">
+      <div className="relative h-48 w-full">
         <Image
-          src="/placeholder.jpg" // Replace with product image path
+          src={imageSrc} // Use the imageSrc prop to dynamically set the image URL
           alt={title}
-          width={300}
-          height={200}
+          layout="fill" // Ensures the image fills the container
+          objectFit="cover" // Keeps the image aspect ratio intact
           className="rounded-lg"
         />
         {badge && (

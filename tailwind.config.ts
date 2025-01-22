@@ -10,10 +10,18 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['Poppins', 'sans-serif']
+  			sans: [
+  				'Poppins',
+  				'sans-serif'
+  			]
   		},
   		fontSize: {
-  			base: ['1rem', { lineHeight: '1.5rem' }]
+  			base: [
+  				'1rem',
+  				{
+  					lineHeight: '1.5rem'
+  				}
+  			]
   		},
   		colors: {
   			background: 'hsl(var(--background))',

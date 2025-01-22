@@ -15,14 +15,15 @@ const NavIcons = () => {
       <Link href="/search" passHref>
         <FiSearch className="h-6 w-6 text-black cursor-pointer" />
       </Link>
-      <Link href="/favorites" passHref>
+      {/* Link the heart icon to the wishlist page */}
+      <Link href="/wishlist" passHref>
         <FaRegHeart className="h-6 w-6 text-black cursor-pointer" />
       </Link>
       <div>
-      <Link href="/cart" passHref>
-        <MdOutlineShoppingCart className="h-6 w-6 text-black cursor-pointer" />
-      </Link>
-    </div>
+        <Link href="/cart"  passHref>
+          <MdOutlineShoppingCart className="h-6 w-6 text-black cursor-pointer" />
+        </Link>
+      </div>
     </div>
   );
 };
