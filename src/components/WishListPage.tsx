@@ -1,9 +1,6 @@
 // In WishlistPage.tsx
 
 import React, { useState, useEffect } from "react";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { MdOutlineCompareArrows } from "react-icons/md";
-import { IoShareSocial } from "react-icons/io5";
 import Image from "next/image";
 
 interface Product {
@@ -17,7 +14,7 @@ interface Product {
 }
 
 const WishlistPage: React.FC = () => {
-  const [wishlist, setWishlist] = useState<string[]>(() => {
+  const [wishlist, ] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
       const storedWishlist = localStorage.getItem("wishlist");
       return storedWishlist ? JSON.parse(storedWishlist) : [];

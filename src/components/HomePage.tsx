@@ -1,11 +1,7 @@
 "use client";
 import Image from "next/image";
-import { IoShareSocial } from "react-icons/io5";
-import { MdOutlineCompareArrows } from "react-icons/md";
-import { FaRegHeart } from "react-icons/fa";
 import ForthSection from "./FourthSection";
-import FifthSection from "./FifthSection";
-import Link from "next/link";
+// import FifthSection from "./FifthSection";
 import ProductGrid from "./ProductGrid";
 
 const HomePage = () => {
@@ -121,7 +117,7 @@ const HomePage = () => {
       <ForthSection />
 
       {/* FifthSection Gallery */}
-      <FifthSection />
+      {/* <FifthSection /> */}
       
     </>
   );

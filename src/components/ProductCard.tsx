@@ -1,9 +1,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
 // Define product props
 interface Product {
   _id: string;
@@ -21,7 +19,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
 
   return (
     <div className="bg-[#F4F5F7] relative overflow-hidden flex flex-col transition-all duration-300 hover:scale-105">

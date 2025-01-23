@@ -1,9 +1,7 @@
 import { CartProvider } from "../../context/CartContext";
 
-interface GlobalProviderProps {
-  children: React.ReactNode; // Define the type of children
-}
 
-export function GlobalProvider({ children }: GlobalProviderProps) {
+
+export function GlobalProvider({ children }: { children: React.ReactNode }) {
   return <CartProvider>{children}</CartProvider>;
 }

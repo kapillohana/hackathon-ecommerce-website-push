@@ -7,10 +7,10 @@ import { IoShareSocial } from "react-icons/io5";
 import { client } from "../sanity/lib/client"; // Adjust this import path
 import ButtonSelfMade from "./ui/ButtonSelfMade";
 import Link from "next/link";
-import Shop from "@/app/Shop/page";
+import { Product } from "../../Types";
 
 const ProductSection = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);  // Add loading state
 
   useEffect(() => {

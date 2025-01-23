@@ -5,9 +5,6 @@ import { MdOutlineCompareArrows } from "react-icons/md";
 import { IoShareSocial } from "react-icons/io5";
 import { client } from "@/sanity/lib/client";
 import Link from "next/link";
-import { product } from "@/sanity/schemaTypes/product";
-import ProductCard from "@/components/ProductCard";
-import { useCart } from "../../context/CartContext"; // Import CartContext
 
 // Product interface
 interface Product {
@@ -48,7 +45,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const productsPerPage = 8;
 
-  const { addToCart } = useCart(); // Use addToCart function from context
+  // const { addToCart } = useCart(); // Use addToCart function from context
 
   useEffect(() => {
     const fetchProducts = async () => {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 
 const ForthSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,12 +41,15 @@ const ForthSection = () => {
 
         {/* Middle Section (Image) */}
         <div className="w-full md:w-[35%] flex items-center justify-center bg-[#fcf8f3]">
-          <img
-            src="/images/slide.png"
-            alt="Image"
-            className="w-full h-auto rounded"
-          />
-        </div>
+  <Image
+    src="/images/slide.png"
+    alt="Image"
+    width={0} // Set width to 0 for responsive behavior
+    height={0} // Set height to 0 for responsive behavior
+    sizes="100vw" // Adjust sizes attribute as needed
+    className="rounded"
+  />
+</div>
 
         {/* Right Section with Image Slider */}
         <div className="w-full md:w-[35%] p-4 bg-gray-100 relative">
@@ -66,14 +70,17 @@ const ForthSection = () => {
                   transform: `translateX(-${currentIndex * 100}%)`,
                 }}
               >
-                {images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Slide ${index + 1}`}
-                    className="w-full h-[90%] md:h-[90%] object-cover rounded shadow"
-                  />
-                ))}
+                 {images.map((image, index) => (
+        <Image
+          key={index}
+          src={image}
+          alt={`Slide ${index + 1}`}
+          width={0} // Set width to 0 for responsive behavior
+          height={0} // Set height to 0 for responsive behavior
+          layout="fill" // Use layout="fill" for full-size images
+          className="rounded shadow"
+        />
+      ))}
               </div>
             </div>
 

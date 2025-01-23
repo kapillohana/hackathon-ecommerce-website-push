@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const Gallery = () => {
   const images = [
@@ -24,11 +25,14 @@ const Gallery = () => {
             key={index}
             className="relative overflow-hidden rounded-lg shadow-lg w-full h-80" // Fixed height of 320px (h-80)
           >
-            <img
-              src={src}
-              alt={`Gallery item ${index + 1}`}
-              className="w-full h-full object-cover" // Ensure image covers the container
-            />
+            <Image
+      src={src}
+      alt={`Gallery item ${index + 1}`}
+      width={0} // Set width to 0 for responsive behavior
+      height={0} // Set height to 0 for responsive behavior
+      layout="fill" // Use layout="fill" to make the image responsive and fill the container
+      className="object-cover" // Ensure image covers the container
+    />
           </div>
         ))}
       </div>

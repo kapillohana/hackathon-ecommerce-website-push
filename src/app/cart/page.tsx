@@ -4,12 +4,23 @@ import { useCart } from "../../../context/CartContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+// Define a TypeScript interface for cart items
+interface CartItem {
+  _id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image: string;
+  color?: string;
+}
+
 const CartPage = () => {
   const { cart, removeFromCart, setCart } = useCart();
   const [loading, setLoading] = useState<boolean>(false);
   const [notification, setNotification] = useState<string | null>(null);
   const router = useRouter();
 
+  // Load cart from local storage when the component mounts
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedCart = localStorage.getItem("cart");
@@ -19,6 +30,7 @@ const CartPage = () => {
     }
   }, [setCart]);
 
+  // Show notifications with auto-dismiss feature
   const showNotification = (message: string) => {
     setNotification(message);
     setTimeout(() => {
@@ -26,52 +38,35 @@ const CartPage = () => {
     }, 3000);
   };
 
+  // Calculate total cart value
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total: number, item: CartItem) => total + item.price * item.quantity, 0);
   };
 
-  const addToCart = (newItem: any) => {
-    const isProductInCart = cart.some(
-      (item) => item._id === newItem._id && item.color === newItem.color
-    );
-
-    if (isProductInCart) {
-      showNotification("Product already added to cart!");
-      return;
-    }
-
-    const updatedCart = [...cart, { ...newItem, quantity: 1 }];
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
-    showNotification("Product added to cart!");
-  };
-
-  const increaseQuantity = (_id: string, color: string | undefined) => {
+  // Increase product quantity
+  const increaseQuantity = (_id: string, color?: string) => {
     setLoading(true);
-    const updatedCart = cart.map((item) =>
+    const updatedCart = cart.map((item: CartItem) =>
       item._id === _id && item.color === color
         ? { ...item, quantity: item.quantity + 1 }
         : item
     );
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setTimeout(() => setLoading(false), 300);
   };
 
-  const decreaseQuantity = (_id: string, color: string | undefined) => {
+  // Decrease product quantity
+  const decreaseQuantity = (_id: string, color?: string) => {
     setLoading(true);
-    const updatedCart = cart.map((item) =>
+    const updatedCart = cart.map((item: CartItem) =>
       item._id === _id && item.color === color && item.quantity > 1
         ? { ...item, quantity: item.quantity - 1 }
         : item
     );
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setTimeout(() => setLoading(false), 300);
   };
 
   return (
@@ -100,7 +95,7 @@ const CartPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map((item) => (
+                  {cart.map((item: CartItem) => (
                     <tr key={`${item._id}-${item.color}`} className="border-b hover:bg-gray-100">
                       <td className="px-6 py-4 flex items-center gap-4">
                         <Image
@@ -135,8 +130,11 @@ const CartPage = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => removeFromCart(item._id)}
-                          className="text-red-500 hover:text-red-700 font-semibold"
+                          onClick={() => {
+                            removeFromCart(item._id);
+                            showNotification("Item removed from cart.");
+                          }}
+                          className="text-red-600 font-semibold"
                         >
                           Remove
                         </button>
@@ -149,28 +147,22 @@ const CartPage = () => {
           </div>
         )}
       </div>
-      <div className="lg:w-1/3 lg:ml-8 mt-10 lg:mt-32">
-        <div className="bg-white p-6 rounded-lg shadow-lg sticky top-0">
-          <h2 className="text-2xl font-semibold text-[#FF7A28] mb-6">
-            Order Summary
-          </h2>
-          <div className="flex justify-between mb-4">
-            <p className="text-lg font-medium">Total</p>
-            <p className="text-lg font-semibold">
-              Rs: {calculateTotal().toLocaleString()}
-            </p>
-          </div>
-          <button
-            className="w-full py-3 bg-[#FF7A28] text-white text-xl font-semibold rounded-md hover:bg-orange-600"
-            onClick={() => router.push('/checkout')}
-          >
-            Proceed to Checkout
-          </button>
+      <div className="lg:w-1/3 bg-[#FF7A28] rounded-lg p-6 shadow-xl">
+        <h2 className="text-3xl font-bold text-white mb-4">Cart Summary</h2>
+        <div className="mb-4">
+          <p className="text-xl text-white">
+            Total: Rs: {calculateTotal().toLocaleString()}
+          </p>
         </div>
+        <button
+          onClick={() => router.push("/checkout")}
+          className="w-full py-2 px-4 bg-white text-[#FF7A28] font-semibold rounded-lg transition-all duration-300 ease-in-out"
+        >
+          Proceed to Checkout
+        </button>
       </div>
-
       {notification && (
-        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-3 px-6 rounded-lg shadow-lg transition-opacity duration-500">
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-lg">
           {notification}
         </div>
       )}
