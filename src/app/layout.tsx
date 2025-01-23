@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Head from "next/head";
 import Footer from "@/components/Footer";
+import { GlobalProvider } from "./GlobalProvider";
 
 // Importing local fonts
 const geistSans = localFont({
@@ -41,9 +42,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
+        <GlobalProvider>
           <Header />
           {children}
           <Footer />
+           </GlobalProvider>
        
       </body>
     </html>

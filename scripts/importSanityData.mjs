@@ -1,16 +1,12 @@
 import { createClient } from "@sanity/client";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const client = createClient({
   projectId: "d7rhsd6f",
   dataset: "production",
   useCdn: true,
   apiVersion: "2025-01-13",
-  token: process.env.SANITY_TOKEN,
-});
-
+  token:
+  process.env.NEXT_PUBLIC_SANITY_TOKEN,});
 
 async function uploadImageToSanity(imageUrl) {
   try {

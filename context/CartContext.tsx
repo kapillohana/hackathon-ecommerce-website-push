@@ -1,35 +1,69 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { createContext, useState, useEffect, useContext } from "react";
 
-// Define the shape of the cart context data
-interface CartContextType {
-  cart: any[];  // You can specify the type of items in the cart if needed
-  setCart: React.Dispatch<React.SetStateAction<any[]>>;  // Function to update cart
-}
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 
-// Set the default value for the context
+type CartItem = {
+  _id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image: string;
+  color?: string;
+};
+
+type CartContextType = {
+  cart: CartItem[];
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: string) => void;
+  setCart: (cart: CartItem[]) => void;
+};
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cart, setCart] = useState<any[]>([]);  // Your cart state
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [cart, setCartState] = useState<CartItem[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
-  const router = useRouter();
+  // Only execute this on the client side
+  useEffect(() => {
+    setIsClient(true);
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCartState(JSON.parse(storedCart));
+    }
+  }, []);
+
+  const setCart = (newCart: CartItem[]) => {
+    setCartState((prevCart) => {
+      if (JSON.stringify(prevCart) !== JSON.stringify(newCart)) {
+        localStorage.setItem("cart", JSON.stringify(newCart)); // Persist only if the cart has changed
+        return newCart;
+      }
+      return prevCart;
+    });
+  };
+
+  const addToCart = (item: CartItem) => {
+    setCart([...cart, item]);
+  };
+
+  const removeFromCart = (id: string) => {
+    const updatedCart = cart.filter((item) => item._id !== id);
+    setCart(updatedCart);
+  };
+
+  if (!isClient) {
+    return null; // Prevent rendering during SSR
+  }
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        setCart,  // Provide the setter function to update the cart
-      }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, setCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-// Custom hook to use the CartContext
-export const useCart = (): CartContextType => {
+export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
     throw new Error("useCart must be used within a CartProvider");

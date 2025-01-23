@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -6,6 +5,9 @@ import { MdOutlineCompareArrows } from "react-icons/md";
 import { IoShareSocial } from "react-icons/io5";
 import { client } from "@/sanity/lib/client";
 import Link from "next/link";
+import { product } from "@/sanity/schemaTypes/product";
+import ProductCard from "@/components/ProductCard";
+import { useCart } from "../../context/CartContext"; // Import CartContext
 
 // Product interface
 interface Product {
@@ -45,6 +47,8 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const productsPerPage = 8;
+
+  const { addToCart } = useCart(); // Use addToCart function from context
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -139,7 +143,6 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
                       onClick={(e) => e.preventDefault()} // Prevent page navigation
                     >
                       <IoShareSocial className="text-gray-500" />
-                      
                     </button>
                   </div>
                 </div>

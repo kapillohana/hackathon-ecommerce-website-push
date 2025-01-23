@@ -1,50 +1,46 @@
-import Image from 'next/image';
 
-interface ProductCardProps {
+import React from "react";
+import Image from "next/image";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import Link from "next/link";
+import { useCart } from "../../context/CartContext";
+// Define product props
+interface Product {
+  _id: string;
   title: string;
+  price: number;
   description: string;
-  price: string;
-  oldPrice?: string; // Optional prop
-  discount?: string; // Optional prop
-  badge?: string;
-  imageSrc: string; // Prop for image source
+  image: string;
+  slug: {
+    current: string;
+  };
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  title,
-  description,
-  price,
-  oldPrice,
-  discount,
-  badge,
-  imageSrc, // Use the imageSrc prop
-}) => {
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { addToCart } = useCart();
+
   return (
-    <div className="border p-4 rounded-lg shadow hover:shadow-lg transition h-full flex flex-col">
-      <div className="relative h-48 w-full">
-        <Image
-          src={imageSrc} // Use the imageSrc prop to dynamically set the image URL
-          alt={title}
-          layout="fill" // Ensures the image fills the container
-          objectFit="cover" // Keeps the image aspect ratio intact
-          className="rounded-lg"
-        />
-        {badge && (
-          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-            {badge}
-          </span>
-        )}
-      </div>
-      <h3 className="font-bold mt-4 text-lg">{title}</h3>
-      <p className="text-gray-500">{description}</p>
-      <div className="mt-2 flex items-center justify-between">
-        <div>
-          <span className="text-red-500 font-bold">{price}</span>
-          {oldPrice && (
-            <span className="text-gray-500 line-through text-sm ml-2">{oldPrice}</span>
-          )}
+    <div className="bg-[#F4F5F7] relative overflow-hidden flex flex-col transition-all duration-300 hover:scale-105">
+      <Link href={`/product/${product.slug.current}`}>
+        <div className="relative w-full h-[300px]">
+          <Image src={product.image} alt={product.title} width={300} height={300} className="object-cover w-full h-full" />
         </div>
-        {discount && <span className="text-sm bg-yellow-200 px-2 rounded">{discount}</span>}
+      </Link>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold">{product.title}</h3>
+        <p className="text-sm text-gray-600">{product.description.slice(0, 100)}...</p>
+        <div className="mt-2">
+          <span className="font-bold text-xl text-gray-800">Rs: {product.price}</span>
+        </div>
+        <button
+          className="bg-[#FF7A28] text-white px-4 py-2 rounded-md mt-4"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

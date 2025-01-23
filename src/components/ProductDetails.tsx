@@ -1,7 +1,7 @@
-"use client";
-
+"use client"
 import Image from "next/image";
 import { useState } from "react";
+import { useCart } from "../../context/CartContext"; // Import CartContext
 
 interface Product {
   _id: string;
@@ -24,13 +24,22 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedImage, setSelectedImage] = useState<string>(product.image);
 
+  const { addToCart } = useCart(); // Use addToCart function from context
+
   const discountedPrice = product.discountedPercentage
     ? (product.price * (1 - product.discountedPercentage / 100)).toFixed(2)
     : null;
 
-  const handleAddToCart = () => {
-    alert(`Added ${quantity}x ${product.title} in ${selectedColor} to cart`);
-  };
+    const handleAddToCart = () => {
+      const cartItem = {
+        _id: product._id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+        image: product.image,
+      };
+      addToCart(cartItem);
+    };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">

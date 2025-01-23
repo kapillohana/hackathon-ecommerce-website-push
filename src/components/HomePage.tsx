@@ -54,6 +54,7 @@ const HomePage = () => {
           <button className="bg-[#B88E2F] w-[12rem] sm:w-[13.88rem] h-[4.5rem] sm:h-[4.63rem] mb-[2rem] sm:mb-[3rem] text-white font-semibold rounded-md">
             BUY NOW
           </button>
+          
         </div>
       </div>
 
