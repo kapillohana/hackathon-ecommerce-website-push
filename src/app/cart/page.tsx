@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../../context/CartContext";
 import Image from "next/image";
@@ -147,8 +147,8 @@ const CartPage = () => {
           </div>
         )}
       </div>
-      <div className="lg:w-1/3 bg-[#FF7A28] rounded-lg p-6 shadow-xl">
-        <h2 className="text-3xl font-bold text-white mb-4">Cart Summary</h2>
+      <div className="lg:w-1/3 bg-[#FF7A28] rounded-lg p-6 shadow-xl ml-10 mt-24 max-h-64">
+        <h2 className="text-3xl font-bold text-white mb-4 text-center">Cart Summary</h2>
         <div className="mb-4">
           <p className="text-xl text-white">
             Total: Rs: {calculateTotal().toLocaleString()}
@@ -156,7 +156,7 @@ const CartPage = () => {
         </div>
         <button
           onClick={() => router.push("/checkout")}
-          className="w-full py-2 px-4 bg-white text-[#FF7A28] font-semibold rounded-lg transition-all duration-300 ease-in-out"
+          className="w-full py-2 px-4 mt-10 bg-white text-[#FF7A28] font-semibold rounded-lg transition-all duration-300 ease-in-out"
         >
           Proceed to Checkout
         </button>

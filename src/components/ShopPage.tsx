@@ -48,28 +48,28 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
   // const { addToCart } = useCart(); // Use addToCart function from context
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await client.fetch(query);
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
 
-  const toggleWishlist = (id: string) => {
+  async function fetchProducts() {
+    setLoading(true);
+    try {
+      const data = await client.fetch(query);
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function toggleWishlist(id: string) {
     setWishlist((prevWishlist) =>
       prevWishlist.includes(id)
         ? prevWishlist.filter((item) => item !== id)
         : [...prevWishlist, id]
     );
-  };
+  }
 
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.tags.includes(selectedCategory))
@@ -79,10 +79,13 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  function paginate(pageNumber: number) {
+    setCurrentPage(pageNumber);
+  }
 
-  const truncateDescription = (description: string, maxLength: number = 100) =>
-    description.length > maxLength ? `${description.slice(0, maxLength)}...` : description;
+  function truncateDescription(description: string, maxLength: number = 100) {
+    return description.length > maxLength ? `${description.slice(0, maxLength)}...` : description;
+  }
 
   if (loading) {
     return (

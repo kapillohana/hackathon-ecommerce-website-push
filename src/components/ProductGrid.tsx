@@ -7,15 +7,15 @@ import { IoShareSocial } from "react-icons/io5";
 import { client } from "../sanity/lib/client"; // Adjust this import path
 import ButtonSelfMade from "./ui/ButtonSelfMade";
 import Link from "next/link";
-import { Product } from "../../Types";
+import { Product } from "../Types";
 
 const ProductSection = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);  // Add loading state
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);  // Set loading to true before fetching
+    function fetchProducts() {
+      setLoading(true); // Set loading to true before fetching
       const query = `*[_type == "product"][0..7]{
         _id,
         title,
@@ -24,26 +24,27 @@ const ProductSection = () => {
         "image": productImage.asset->url
       }`;
 
-      try {
-        const productsData = await client.fetch(query);
-        setProducts(productsData);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);  // Set loading to false after fetching
-      }
-    };
+      client
+        .fetch(query)
+        .then((productsData) => setProducts(productsData))
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Set loading to false after fetching
+        });
+    }
 
     fetchProducts();
   }, []);
 
   // Function to limit description text
-  const truncateDescription = (description: string, maxLength: number = 100) => {
+  function truncateDescription(description: string, maxLength: number = 100) {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "...";
     }
     return description;
-  };
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-32 lg:mt-20 sm:mt-10 text-center">
@@ -111,11 +112,11 @@ const ProductSection = () => {
         </div>
       )}
 
-<div className="justify-center items-center mb-10 mt-4">
-  <Link href="/Shop">
-    <ButtonSelfMade text="See More Products" />
-  </Link>
-</div>
+      <div className="justify-center items-center mb-10 mt-4">
+        <Link href="/Shop">
+          <ButtonSelfMade text="See More Products" />
+        </Link>
+      </div>
     </div>
   );
 };
