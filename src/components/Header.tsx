@@ -7,32 +7,35 @@ const Header = () => {
   return (
     <>
       {/* Large Screen Header */}
-      <div className="w-full h-[90px] bg-white px-10 md:px-18 lg:px-24 py-8 hidden lg:flex items-center justify-between">
+      <div className="w-full h-[100px] bg-white px-10 md:px-18 lg:px-24 py-8 hidden lg:flex items-center justify-between">
         {/* Large Screen Logo and Navigation Links */}
         <div className="flex items-center">
           <Link href="/" passHref>
             <Image
               src="/images/logo.png"
               alt="Logo"
-              width={120}
-              height={60}
+              width={140}
+              height={70}
               className="cursor-pointer"
             />
           </Link>
         </div>
 
         {/* Large Screen Navigation Links */}
-        <div className="hidden lg:flex gap-12 text-black font-medium">
-          <Link href="/" className="cursor-pointer hover:underline">
+        <div className="hidden lg:flex gap-14 text-black font-medium ">
+          <Link href="/" className="cursor-pointer hover:underline hover:text-[#B88E2F] ">
             Home
           </Link>
-          <Link href="/Shop" className="cursor-pointer hover:underline">
+          <Link href="/Shop" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
             Shop
           </Link>
-          <Link href="/" className="cursor-pointer hover:underline">
+          <Link href="/" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
             About
           </Link>
-          <Link href="/contact" className="cursor-pointer hover:underline">
+          <Link href="/blogs" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
+            Blogs
+          </Link>
+          <Link href="/contact" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
             Contact
           </Link>
         </div>

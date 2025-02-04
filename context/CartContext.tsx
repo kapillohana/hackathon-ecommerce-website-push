@@ -30,30 +30,37 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCartState] = useState<CartItem[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  // Load cart from localStorage on component mount (client-side only)
+  // Load cart from localStorage on mount (client-side only)
   useEffect(() => {
     setIsClient(true);
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       try {
-        setCartState(JSON.parse(storedCart));
+        const parsedCart = JSON.parse(storedCart);
+        if (JSON.stringify(parsedCart) !== JSON.stringify(cart)) {
+          setCartState(parsedCart);
+        }
       } catch (error) {
         console.error("Failed to parse cart from localStorage:", error);
       }
     }
   }, []);
 
-  // Helper function to update the cart and persist it in localStorage
+  // Helper function to update cart and persist in localStorage
   const updateCart = (newCart: CartItem[]) => {
-    setCartState(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartState((prevCart) => {
+      if (JSON.stringify(prevCart) === JSON.stringify(newCart)) return prevCart;
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      return newCart;
+    });
   };
 
-  // Add item to cart (with quantity update if item already exists)
+  // Add item to cart (updates quantity if already exists)
   const addToCart = (item: CartItem) => {
     setCartState((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
       let updatedCart;
+
       if (existingItem) {
         updatedCart = prevCart.map((cartItem) =>
           cartItem._id === item._id
@@ -63,26 +70,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       } else {
         updatedCart = [...prevCart, item];
       }
+
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       return updatedCart;
     });
   };
 
-  // Remove an item from the cart
+  // Remove item from cart safely
   const removeFromCart = (id: string) => {
-    const updatedCart = cart.filter((item) => item._id !== id);
-    updateCart(updatedCart);
+    setCartState((prevCart) => {
+      const updatedCart = prevCart.filter((item) => item._id !== id);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return updatedCart;
+    });
   };
 
-  // Set cart with new values
+  // Set cart with new values (ensuring minimal updates)
   const setCart = (newCart: CartItem[]) => {
     updateCart(newCart);
   };
 
-  // Clear the cart
+  // Clear the cart safely
   const clearCart = () => {
-    setCartState([]);
-    localStorage.removeItem("cart");
+    setCartState((prevCart) => {
+      if (prevCart.length === 0) return prevCart;
+      localStorage.removeItem("cart");
+      return [];
+    });
   };
 
   // Simulate checkout process
@@ -91,12 +105,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return { success: false, message: "Your cart is empty. Add items before checkout." };
     }
 
-    // Simulate API call or processing delay
     return new Promise((resolve) => {
       setTimeout(() => {
         clearCart();
         resolve({ success: true, message: "Checkout successful! Thank you for your order." });
-      }, 2000); // Simulated delay (2 seconds)
+      }, 2000);
     });
   };
 
@@ -112,7 +125,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook to use the cart context in your components
+// Custom hook to use the cart context in components
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {

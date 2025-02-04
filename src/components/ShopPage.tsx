@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaFilter } from "react-icons/fa"; // Import FaFilter
 import { MdOutlineCompareArrows } from "react-icons/md";
 import { IoShareSocial } from "react-icons/io5";
 import { client } from "@/sanity/lib/client";
@@ -43,9 +43,13 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // State for search
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false); // State for filter dropdown
+  const [selectedFilter, setSelectedFilter] = useState<string>(""); // State for selected filter category
   const productsPerPage = 8;
 
-  // const { addToCart } = useCart(); // Use addToCart function from context
+  // Define limited categories
+  const categories = ["Sofas", "Beds", "Chairs", "Furniture"];
 
   useEffect(() => {
     fetchProducts();
@@ -71,13 +75,18 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
     );
   }
 
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.tags.includes(selectedCategory))
+  // Filter products by selected category and search term
+  const filteredProducts = selectedFilter
+    ? products.filter((product) => product.tags.includes(selectedFilter))
     : products;
+
+  const searchedProducts = filteredProducts.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = searchedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   function paginate(pageNumber: number) {
     setCurrentPage(pageNumber);
@@ -85,6 +94,12 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
 
   function truncateDescription(description: string, maxLength: number = 100) {
     return description.length > maxLength ? `${description.slice(0, maxLength)}...` : description;
+  }
+
+  // Reset search and filters
+  function resetFilters() {
+    setSearchTerm("");
+    setSelectedFilter("");
   }
 
   if (loading) {
@@ -96,15 +111,82 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
     );
   }
 
-  if (filteredProducts.length === 0) {
-    return <p className="text-center">No products available.</p>;
-  }
-
   return (
     <div className="px-4 sm:px-6 lg:px-12 lg:mt-20 sm:mt-10">
-      <h1 className="text-[#333333] font-bold text-[2.5rem] font-sans mb-8 text-center">
-        Our Products
-      </h1>
+      {/* Filter and Search Bar */}
+      <div className="mb-8 flex justify-between items-center">
+        {/* Filter Section */}
+        <div className="relative flex items-center space-x-2">
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <FaFilter className="text-[#FF7A28] text-2xl" /> {/* Filter Icon */}
+            <span className="text-[#333333] font-semibold">Filter</span> {/* Filter Text */}
+          </button>
+          {/* Filter Dropdown */}
+          {isFilterOpen && (
+            <div className="absolute left-0 mt-2 w-48 bg-white border border-[#ddd] rounded-lg shadow-lg z-10">
+              <div className="p-2">
+                <p className="text-sm font-semibold text-[#333333] mb-2">Filter by Category</p>
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => {
+                      setSelectedFilter(category);
+                      setIsFilterOpen(false);
+                    }}
+                    className="block w-full text-left p-2 hover:bg-gray-100 rounded-lg text-sm text-[#666666]"
+                  >
+                    {category}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    setSelectedFilter("");
+                    setIsFilterOpen(false);
+                  }}
+                  className="block w-full text-left p-2 hover:bg-gray-100 rounded-lg text-sm text-[#666666]"
+                >
+                  Clear Filter
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Search Section */}
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search for products..."
+            className="w-full max-w-[400px] p-2 border border-[#ddd] rounded-lg"
+          />
+          <button
+            onClick={() => setSearchTerm(searchTerm)} // Trigger search when button is clicked
+            className="bg-[#FF7A28] text-white px-4 py-2 rounded-lg"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      {/* Display "No products found" and "Back" button */}
+      {searchedProducts.length === 0 && (
+        <div className="text-center">
+          <p className="text-[#333333] mb-4">No products found.</p>
+          <button
+            onClick={resetFilters}
+            className="bg-[#FF7A28] text-white px-4 py-2 rounded-lg"
+          >
+            Back to All Products
+          </button>
+        </div>
+      )}
+
+     
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {currentProducts.map((product) => (
           <div
@@ -159,6 +241,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
         ))}
       </div>
 
+      {/* Pagination */}
       <div className="flex justify-center mt-8">
         <button
           onClick={() => paginate(currentPage - 1)}
@@ -171,9 +254,9 @@ const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
         </button>
         <button
           onClick={() => paginate(currentPage + 1)}
-          disabled={currentPage * productsPerPage >= filteredProducts.length}
+          disabled={currentPage * productsPerPage >= searchedProducts.length}
           className={`px-4 py-2 bg-[#FF7A28] text-white rounded-md ${
-            currentPage * productsPerPage >= filteredProducts.length ? "opacity-50 cursor-not-allowed" : ""
+            currentPage * productsPerPage >= searchedProducts.length ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
           Next

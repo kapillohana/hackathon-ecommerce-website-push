@@ -43,6 +43,15 @@ const CartPage = () => {
     return cart.reduce((total: number, item: CartItem) => total + item.price * item.quantity, 0);
   };
 
+  // Calculate tax and other details for the summary
+  const calculateTax = (total: number) => {
+    return total * 0.05; // 5% Tax, can be adjusted as needed
+  };
+
+  const calculateFinalTotal = (total: number, tax: number) => {
+    return total + tax;
+  };
+
   // Increase product quantity
   const increaseQuantity = (_id: string, color?: string) => {
     setLoading(true);
@@ -149,17 +158,29 @@ const CartPage = () => {
       </div>
       <div className="lg:w-1/3 bg-[#FF7A28] rounded-lg p-6 shadow-xl ml-10 mt-24 max-h-64">
         <h2 className="text-3xl font-bold text-white mb-4 text-center">Cart Summary</h2>
-        <div className="mb-4">
-          <p className="text-xl text-white">
-            Total: Rs: {calculateTotal().toLocaleString()}
-          </p>
+        <div className="space-y-4">
+          <div className="flex justify-between text-white text-lg">
+            <p>Items Total</p>
+            <p>Rs: {calculateTotal().toLocaleString()}</p>
+          </div>
+          <div className="flex justify-between text-white text-lg">
+            <p>Tax (5%)</p>
+            <p>Rs: {calculateTax(calculateTotal()).toLocaleString()}</p>
+          </div>
+          <div className="flex justify-between text-white text-lg font-semibold">
+            <p>Total</p>
+            <p>Rs: {calculateFinalTotal(calculateTotal(), calculateTax(calculateTotal())).toLocaleString()}</p>
+          </div>
         </div>
         <button
-          onClick={() => router.push("/checkout")}
-          className="w-full py-2 px-4 mt-10 bg-white text-[#FF7A28] font-semibold rounded-lg transition-all duration-300 ease-in-out"
-        >
-          Proceed to Checkout
-        </button>
+  onClick={() => {
+    router.push("/checkout");
+  }}
+  className="w-full py-2 px-4 mt-10 bg-white text-[#FF7A28] font-semibold rounded-lg border-2 border-[#FF7A28] transition-all duration-300 ease-in-out hover:bg-[#FF7A28] hover:text-white hover:border-white"
+>
+  Proceed to Checkout
+</button>
+
       </div>
       {notification && (
         <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-lg">

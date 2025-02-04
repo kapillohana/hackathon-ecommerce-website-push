@@ -1,43 +1,42 @@
-import React from "react";
-import Image from "next/image";
+// components/StylishGallery.jsx
+import Image from 'next/image';
 
-const Gallery = () => {
-  const images = [
-    "/images/gallery (9).png", // Replace with correct paths
-    "/images/image (7).png",
-    "/images/slide3.png",
-    "/images/slide4.png",
-    "/images/slide5.png",
-    "/images/slide6.png",
-    "/images/slide7.png",
-    "/images/slide8.png",
-  ];
+const galleryItems = [
+  { id: 1, src: '/images/product1.png', alt: 'Bedroom Set', width: 600, height: 400 },
+  { id: 2, src: '/images/product2.png', alt: 'Vintage Radio', width: 700, height: 450 },
+  { id: 3, src: '/images/product3.png', alt: 'Living Room Decor', width: 800, height: 600 },
+  { id: 4, src: '/images/product4.png', alt: 'Dining Table Set', width: 500, height: 350 },
+  { id: 5, src: '/images/product5.png', alt: 'Office Desk Setup', width: 650, height: 500 },
+  { id: 6, src: '/images/product6.png', alt: 'Classic Wooden Chair', width: 600, height: 450 },
+  { id: 7, src: '/images/product7', alt: 'Wall Shelf', width: 750, height: 500 },
+  { id: 8, src: '/images/nightstand.jpg', alt: 'Nightstand & Decor', width: 550, height: 400 },
+];
 
+const StylishGallery = () => {
   return (
-    <div className="container mx-auto text-center py-10">
-      <h2 className="text-3xl font-semibold mb-8">
-        Share your setup with{" "}
-        <span className="text-orange-600">#FuniroFurniture</span>
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {images.map((src, index) => (
+    <section className="mx-auto max-w-7xl p-4">
+      <h2 className="mb-6 text-3xl font-bold text-gray-800">#FunForFurniture</h2>
+      <div className="columns-1 gap-4 sm:columns-2 md:columns-3">
+        {galleryItems.map((item) => (
           <div
-            key={index}
-            className="relative overflow-hidden rounded-lg shadow-lg w-full h-80" // Fixed height of 320px (h-80)
+            key={item.id}
+            className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg shadow"
           >
             <Image
-      src={src}
-      alt={`Gallery item ${index + 1}`}
-      width={0} // Set width to 0 for responsive behavior
-      height={0} // Set height to 0 for responsive behavior
-      layout="fill" // Use layout="fill" to make the image responsive and fill the container
-      className="object-cover" // Ensure image covers the container
-    />
+              src={item.src}
+              alt={item.alt}
+              width={item.width} // Dynamic width for each image
+              height={item.height} // Dynamic height for each image
+              className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <p className="font-semibold text-white">{item.alt}</p>
+            </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Gallery;
+export default StylishGallery;

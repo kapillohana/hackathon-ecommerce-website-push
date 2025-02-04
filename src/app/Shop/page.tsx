@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { SearchButton } from "@/components/ui/SearchButton";
 import {
   Select,
   SelectContent,
@@ -44,9 +43,7 @@ const Shop = () => {
             <SelectItem value="lamps">Lamps</SelectItem>
           </SelectContent>
         </Select>
-
-        <div className="text-gray-500">Showing results</div>
-        <SearchButton />
+       
       </div>
 
       {/* Product Grid */}
