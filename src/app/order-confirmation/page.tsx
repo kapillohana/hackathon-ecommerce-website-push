@@ -1,15 +1,16 @@
-"use client"
-import { useRouter } from "next/navigation"; // Updated import
+"use client";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import Link from "next/link";
 
 const OrderConfirmationPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // You can redirect to the homepage or another page after confirmation.
+    // Redirect to the homepage after 5 seconds
     setTimeout(() => {
-      router.push("/"); // Redirect to homepage (or another page if needed)
-    }, 5000); // Redirect after 5 seconds
+      router.push("/");
+    }, 5000);
   }, [router]);
 
   return (
@@ -23,13 +24,13 @@ const OrderConfirmationPage = () => {
         </h2>
         <p className="text-center text-lg text-gray-600 mb-4">
           Your order has been successfully placed. We are processing it and will notify you
-          once it's ready for shipping.
+          once it&apos;s ready for shipping.
         </p>
         <p className="text-center text-gray-500">
           You will be redirected to the homepage shortly. If not, click{" "}
-          <a href="/" className="text-[#FF7A28] underline">
+          <Link href="/" className="text-[#FF7A28] underline">
             here
-          </a>{" "}
+          </Link>{" "}
           to go to the homepage now.
         </p>
       </div>

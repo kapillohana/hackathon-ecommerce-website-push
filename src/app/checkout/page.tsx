@@ -13,12 +13,36 @@ interface CartItem {
   color?: string;
 }
 
+interface ShippingInfo {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  instructions: string;
+}
+
+interface Errors {
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+  paymentMethod?: string;
+}
+
 const CheckoutPage = () => {
   const { cart } = useCart();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("credit_card");
   const [shippingMethod, setShippingMethod] = useState("free");
-  const [shippingInfo, setShippingInfo] = useState({
+  const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     name: "",
     email: "",
     phone: "",
@@ -31,7 +55,7 @@ const CheckoutPage = () => {
   });
   const [coupon, setCoupon] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Errors>({});
   const router = useRouter();
 
   // Calculate total cart price
@@ -44,7 +68,7 @@ const CheckoutPage = () => {
     e.preventDefault();
     
     // Error handling for missing fields
-    const tempErrors: any = {};
+    const tempErrors: Errors = {};
     if (!shippingInfo.name) tempErrors.name = "Name is required";
     if (!shippingInfo.email || !/\S+@\S+\.\S+/.test(shippingInfo.email)) tempErrors.email = "Please enter a valid email";
     if (!shippingInfo.phone) tempErrors.phone = "Phone number is required";
@@ -89,11 +113,11 @@ const CheckoutPage = () => {
                 <input
                   type="text"
                   placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                  value={shippingInfo[field as keyof typeof shippingInfo]}
+                  value={shippingInfo[field as keyof ShippingInfo]}
                   onChange={(e) => setShippingInfo({ ...shippingInfo, [field]: e.target.value })}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none"
                 />
-                {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
+                {errors[field as keyof Errors] && <p className="text-red-500 text-sm">{errors[field as keyof Errors]}</p>}
               </div>
             ))}
             <textarea
