@@ -5,6 +5,13 @@ import Header from "@/components/Header";
 import Head from "next/head";
 import Footer from "@/components/Footer";
 import { GlobalProvider } from "./GlobalProvider";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 // Importing local fonts
 const geistSans = localFont({
@@ -42,12 +49,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
-        <GlobalProvider>
-          <Header />
-          {children}
-          <Footer />
-           </GlobalProvider>
-       
+        <ClerkProvider>
+          <GlobalProvider>
+            
+            <Header />
+           
+            {children}
+            <Footer />
+          </GlobalProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

@@ -4,6 +4,8 @@ import ForthSection from "./FourthSection";
 // import FifthSection from "./FifthSection";
 import ProductGrid from "./ProductGrid";
 import DisplayCategories from "./DisplayCategories";
+import ReviewSection from "./Reviews";
+
 
 const HomePage = () => {
 
@@ -120,7 +122,7 @@ const HomePage = () => {
       {/* FifthSection Gallery */}
       {/* <FifthSection /> */}
       <DisplayCategories />
-      
+< ReviewSection />      
     </>
   );
 };

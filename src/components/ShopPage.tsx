@@ -22,7 +22,7 @@ interface Product {
 }
 
 interface ShopPageProps {
-  _selectedCategory?: string;
+  // selectedCategory?: string;
 }
 
 const query = `
@@ -38,7 +38,7 @@ const query = `
   }
 `;
 
-const ShopPage: React.FC<ShopPageProps> = ({ selectedCategory }) => {
+const ShopPage: React.FC<ShopPageProps> = ({ }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

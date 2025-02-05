@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../../context/CartContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/clerk-react"; // Clerk import
+import { RedirectToSignIn } from "@clerk/nextjs";
 
 interface CartItem {
   _id: string;
@@ -58,6 +60,34 @@ const CheckoutPage = () => {
   const [errors, setErrors] = useState<Errors>({});
   const router = useRouter();
 
+  // Clerk authentication
+  const { user, isLoaded, isSignedIn } = useUser();  // Use Clerk's useUser hook
+
+  useEffect(() => {
+    if (!isLoaded) {
+      return; // Prevent further actions if the user data isn't loaded yet.
+    }
+
+    if (!isSignedIn) {
+      // Redirect to sign-in if not authenticated
+      return <RedirectToSignIn />;
+    }
+
+    if (isSignedIn && user) {
+      setShippingInfo({
+        name: user.fullName || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
+        phone: "",
+        address: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "",
+        instructions: "",
+      });
+    }
+  }, [isLoaded, isSignedIn, user]);
+
   // Calculate total cart price
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
   const shippingCharge = shippingMethod === "express" ? 250 : 0;
@@ -66,7 +96,7 @@ const CheckoutPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Error handling for missing fields
     const tempErrors: Errors = {};
     if (!shippingInfo.name) tempErrors.name = "Name is required";
@@ -179,52 +209,63 @@ const CheckoutPage = () => {
           <h2 className="text-3xl font-bold mb-6 text-center text-gray-700">Order Summary</h2>
           <div className="space-y-4">
             {cart.map((item) => (
-              <div key={`${item._id}-${item.color}`} className="flex items-center justify-between bg-white p-4 rounded-lg shadow">
-                <div className="flex items-center gap-4">
-                  <Image src={item.image} alt={item.title} width={60} height={60} className="rounded-lg" />
-                  <div>
-                    <p className="text-gray-800 font-medium">{item.title}</p>
-                    {item.color && <p className="text-sm text-gray-500">Color: {item.color}</p>}
-                    <p className="text-gray-600">Qty: {item.quantity}</p>
-                  </div>
+              <div key={`${item._id}-${item.color}`} className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={50}
+                    height={50}
+                    className="rounded-md"
+                  />
+                  <span className="ml-3 text-lg">{item.title}</span>
                 </div>
-                <p className="font-semibold text-gray-800">Rs: {(item.price * item.quantity).toLocaleString()}</p>
+                <span className="text-lg">{item.quantity} x ₨{item.price}</span>
               </div>
             ))}
-          </div>
-
-          {/* Pricing Details */}
-          <div className="mt-6 space-y-2 text-lg text-gray-700">
-            <div className="flex justify-between">
-              <span>Subtotal:</span>
-              <span>Rs: {cartTotal.toLocaleString()}</span>
+            <hr />
+            <div className="flex justify-between text-lg font-semibold">
+              <span>Total</span>
+              <span>₨{cartTotal}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Shipping:</span>
-              <span>{shippingCharge > 0 ? `Rs: ${shippingCharge}` : "Free"}</span>
+            <div className="flex justify-between text-lg font-semibold">
+              <span>Shipping</span>
+              <span>₨{shippingCharge}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Discount:</span>
-              <span>{discount > 0 ? `Rs: -${discount.toLocaleString()}` : "No Discount"}</span>
-            </div>
-            <hr className="border-gray-300 my-3" />
-            <div className="flex justify-between font-semibold text-xl">
-              <span>Total:</span>
-              <span>Rs: {totalAmount.toLocaleString()}</span>
+            {discount > 0 && (
+              <div className="flex justify-between text-lg font-semibold">
+                <span>Discount</span>
+                <span>-₨{discount}</span>
+              </div>
+            )}
+            <hr />
+            <div className="flex justify-between text-xl font-bold">
+              <span>Total Amount</span>
+              <span>₨{totalAmount}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Confirmation Modal */}
+      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-1/3">
-            <h3 className="text-2xl font-semibold mb-4 text-center text-gray-700">Confirm Your Order</h3>
-            <p className="text-gray-600 mb-4">Please confirm that all the information is correct before submitting your order.</p>
-            <div className="flex justify-between">
-              <button onClick={handleCloseModal} className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md">Cancel</button>
-              <button onClick={handleConfirm} className="bg-[#FF7A28] text-white py-2 px-4 rounded-md">Confirm</button>
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-2xl font-bold text-center mb-4">Confirm Order</h2>
+            <p className="text-lg mb-4">Your total amount is ₨{totalAmount}</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={handleCloseModal}
+                className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="px-6 py-2 bg-[#FF7A28] text-white rounded-lg hover:bg-[#e66a1e]"
+              >
+                Confirm
+              </button>
             </div>
           </div>
         </div>
