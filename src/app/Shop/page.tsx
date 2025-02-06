@@ -28,26 +28,12 @@ const Shop = () => {
         <p className="text-gray-200 mt-2">Home / Shop</p>
       </div>
 
-      {/* Filters Section */}
-      <div className="flex justify-between items-center mb-8">
-        <Select onValueChange={handleCategoryChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="bed">Bed</SelectItem>
-            <SelectItem value="chairs">Chairs</SelectItem>
-            <SelectItem value="furniture">Furniture</SelectItem>
-            <SelectItem value="sofas">Sofas</SelectItem>
-            <SelectItem value="lamps">Lamps</SelectItem>
-          </SelectContent>
-        </Select>
+     
        
-      </div>
+     
 
       {/* Product Grid */}
-      <ShopPage selectedCategory={selectedCategory} />
+      <ShopPage _selectedCategory={selectedCategory} />
 
     </div>
   );

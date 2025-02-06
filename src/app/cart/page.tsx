@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 // Define a TypeScript interface for cart items
-interface CartItem {
+interface _CartItem {
   _id: string;
   title: string;
   price: number;
@@ -40,7 +40,7 @@ const CartPage = () => {
 
   // Calculate total cart value
   const calculateTotal = () => {
-    return cart.reduce((total: number, item: CartItem) => total + item.price * item.quantity, 0);
+    return cart.reduce((total: number, item: _CartItem) => total + item.price * item.quantity, 0);
   };
 
   // Calculate tax and other details for the summary
@@ -55,7 +55,7 @@ const CartPage = () => {
   // Increase product quantity
   const increaseQuantity = (_id: string, color?: string) => {
     setLoading(true);
-    const updatedCart = cart.map((item: CartItem) =>
+    const updatedCart = cart.map((item: _CartItem) =>
       item._id === _id && item.color === color
         ? { ...item, quantity: item.quantity + 1 }
         : item
@@ -68,7 +68,7 @@ const CartPage = () => {
   // Decrease product quantity
   const decreaseQuantity = (_id: string, color?: string) => {
     setLoading(true);
-    const updatedCart = cart.map((item: CartItem) =>
+    const updatedCart = cart.map((item: _CartItem) =>
       item._id === _id && item.color === color && item.quantity > 1
         ? { ...item, quantity: item.quantity - 1 }
         : item
@@ -104,7 +104,7 @@ const CartPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map((item: CartItem) => (
+                  {cart.map((item: _CartItem) => (
                     <tr key={`${item._id}-${item.color}`} className="border-b hover:bg-gray-100">
                       <td className="px-6 py-4 flex items-center gap-4">
                         <Image

@@ -6,15 +6,6 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/clerk-react"; // Clerk import
 import { RedirectToSignIn } from "@clerk/nextjs";
 
-interface CartItem {
-  _id: string;
-  title: string;
-  price: number;
-  quantity: number;
-  image: string;
-  color?: string;
-}
-
 interface ShippingInfo {
   name: string;
   email: string;
@@ -37,6 +28,12 @@ interface Errors {
   zip?: string;
   country?: string;
   paymentMethod?: string;
+  easypaisaPhone?: string;
+  jazzcashPhone?: string;
+  bankDetails?: string;
+  creditCardNumber?: string;
+  creditCardExpiry?: string;
+  creditCardCVC?: string;
 }
 
 const CheckoutPage = () => {
@@ -58,21 +55,27 @@ const CheckoutPage = () => {
   const [coupon, setCoupon] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
+  const [easypaisaPhone, setEasypaisaPhone] = useState("");
+  const [jazzcashPhone, setJazzcashPhone] = useState("");
+  const [bankDetails, setBankDetails] = useState("");
+  const [creditCardNumber, setCreditCardNumber] = useState("");
+  const [creditCardExpiry, setCreditCardExpiry] = useState("");
+  const [creditCardCVC, setCreditCardCVC] = useState("");
   const router = useRouter();
 
   // Clerk authentication
-  const { user, isLoaded, isSignedIn } = useUser();  // Use Clerk's useUser hook
+  const { user, isLoaded, isSignedIn } = useUser();
 
   useEffect(() => {
-    if (!isLoaded) {
-      return; // Prevent further actions if the user data isn't loaded yet.
-    }
+    if (!isLoaded) return; // Wait for Clerk to load
 
     if (!isSignedIn) {
       // Redirect to sign-in if not authenticated
-      return <RedirectToSignIn />;
+      router.push("/sign-in");
+      return;
     }
 
+    // Pre-fill shipping info if user is signed in
     if (isSignedIn && user) {
       setShippingInfo({
         name: user.fullName || "",
@@ -86,7 +89,17 @@ const CheckoutPage = () => {
         instructions: "",
       });
     }
-  }, [isLoaded, isSignedIn, user]);
+  }, [isLoaded, isSignedIn, router, user]);
+
+  // If Clerk is still loading, show a loading state
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  // If the user is not signed in, do not render the component
+  if (!isSignedIn) {
+    return null; // Prevents rendering before redirection
+  }
 
   // Calculate total cart price
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -109,6 +122,22 @@ const CheckoutPage = () => {
     if (!shippingInfo.country) tempErrors.country = "Country is required";
     if (!paymentMethod) tempErrors.paymentMethod = "Payment method is required";
 
+    // Payment method-specific validation
+    if (paymentMethod === "easypaisa" && !easypaisaPhone) {
+      tempErrors.easypaisaPhone = "EasyPaisa phone number is required";
+    }
+    if (paymentMethod === "jazzcash" && !jazzcashPhone) {
+      tempErrors.jazzcashPhone = "JazzCash phone number is required";
+    }
+    if (paymentMethod === "bank_transfer" && !bankDetails) {
+      tempErrors.bankDetails = "Bank details are required";
+    }
+    if (paymentMethod === "credit_card") {
+      if (!creditCardNumber) tempErrors.creditCardNumber = "Credit card number is required";
+      if (!creditCardExpiry) tempErrors.creditCardExpiry = "Expiry date is required";
+      if (!creditCardCVC) tempErrors.creditCardCVC = "CVC is required";
+    }
+
     if (Object.keys(tempErrors).length > 0) {
       setErrors(tempErrors);
     } else {
@@ -121,13 +150,102 @@ const CheckoutPage = () => {
     setTimeout(() => {
       setLoading(false);
       setIsModalOpen(false);
-      // Redirect to the confirmation page after 2 seconds
       router.push("/order-confirmation");
     }, 2000);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const renderPaymentMethodFields = () => {
+    switch (paymentMethod) {
+      case "easypaisa":
+        return (
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700 mt-4">EasyPaisa Details</h3>
+            <input
+              type="text"
+              placeholder="Enter EasyPaisa Phone Number"
+              value={easypaisaPhone}
+              onChange={(e) => setEasypaisaPhone(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none"
+            />
+            {errors.easypaisaPhone && <p className="text-red-500 text-sm">{errors.easypaisaPhone}</p>}
+          </div>
+        );
+      case "jazzcash":
+        return (
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700 mt-4">JazzCash Details</h3>
+            <input
+              type="text"
+              placeholder="Enter JazzCash Phone Number"
+              value={jazzcashPhone}
+              onChange={(e) => setJazzcashPhone(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none"
+            />
+            {errors.jazzcashPhone && <p className="text-red-500 text-sm">{errors.jazzcashPhone}</p>}
+          </div>
+        );
+      case "bank_transfer":
+        return (
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700 mt-4">Bank Transfer Details</h3>
+            <textarea
+              placeholder="Enter Bank Account Details"
+              value={bankDetails}
+              onChange={(e) => setBankDetails(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none"
+            />
+            {errors.bankDetails && <p className="text-red-500 text-sm">{errors.bankDetails}</p>}
+          </div>
+        );
+      case "credit_card":
+        return (
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700 mt-4">Credit Card Details</h3>
+            <input
+              type="text"
+              placeholder="Card Number"
+              value={creditCardNumber}
+              onChange={(e) => setCreditCardNumber(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none mb-4"
+            />
+            {errors.creditCardNumber && <p className="text-red-500 text-sm">{errors.creditCardNumber}</p>}
+            <input
+              type="text"
+              placeholder="Expiry Date (MM/YY)"
+              value={creditCardExpiry}
+              onChange={(e) => setCreditCardExpiry(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none mb-4"
+            />
+            {errors.creditCardExpiry && <p className="text-red-500 text-sm">{errors.creditCardExpiry}</p>}
+            <input
+              type="text"
+              placeholder="CVC"
+              value={creditCardCVC}
+              onChange={(e) => setCreditCardCVC(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF7A28] outline-none mb-4"
+            />
+            {errors.creditCardCVC && <p className="text-red-500 text-sm">{errors.creditCardCVC}</p>}
+          </div>
+        );
+      case "paypal":
+        return (
+          <div>
+            <h3 className="text-xl font-semibold text-gray-700 mt-4">PayPal</h3>
+            <button
+              onClick={() => router.push("/paypal-login")} // Redirect to PayPal login
+              className="w-full px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              Login to PayPal
+            </button>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -182,6 +300,9 @@ const CheckoutPage = () => {
               <option value="bank_transfer">Bank Transfer</option>
             </select>
             {errors.paymentMethod && <p className="text-red-500 text-sm">{errors.paymentMethod}</p>}
+
+            {/* Render payment method-specific fields */}
+            {renderPaymentMethodFields()}
 
             {/* Coupon Code */}
             <h3 className="text-xl font-semibold text-gray-700 mt-4">Coupon Code</h3>

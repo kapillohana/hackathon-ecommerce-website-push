@@ -17,7 +17,7 @@ const ForthSection = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen w-full bg-white">
+    <div className="flex items-center justify-center h-screen w-full bg-[#f3f4f6]">
       <div className="flex flex-col md:flex-row h-auto w-full max-w-screen-lg mx-auto bg-[#fcf8f3]">
         {/* Left Section */}
         <div className="w-full md:w-[30%] p-6 bg-white flex flex-col justify-center">

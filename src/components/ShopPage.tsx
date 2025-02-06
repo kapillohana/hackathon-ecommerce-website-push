@@ -22,7 +22,7 @@ interface Product {
 }
 
 interface ShopPageProps {
-  // selectedCategory?: string;
+  _selectedCategory?: string;
 }
 
 const query = `
