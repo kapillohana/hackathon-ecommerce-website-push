@@ -63,7 +63,7 @@ const ReviewSection = () => {
 
             {/* Review Content */}
             <div className="lg:w-1/2 w-full flex flex-col items-center lg:items-start text-center lg:text-left mt-6 lg:mt-0">
-              <p className="text-gray-700 text-lg">"{reviews[currentIndex].review}"</p>
+              <p className="text-gray-700 text-lg">&quot;{reviews[currentIndex].review}&quot;</p>
 
               <div className="flex items-center mt-4">
                 <Image src={reviews[currentIndex].image} alt={reviews[currentIndex].name} width={50} height={50} className="rounded-full border border-gray-300" />

@@ -34,8 +34,8 @@ const DisplayCategories: React.FC = () => {
     <>
       <h1 className="text-3xl font-bold text-center my-6">Collections</h1>
       <p className="text-center mb-2">
-        "Discover furniture collections that blend aesthetics with functionality. Whether
-        it&apos;s home, office, or outdoor living, <br /> we have something for every space."
+      &quot;Discover furniture collections that blend aesthetics with functionality. Whether
+        it&apos;s home, office, or outdoor living, <br /> we have something for every space.&quot;
       </p>
       <div className="flex justify-center gap-10 flex-wrap p-8 bg-white">
         {products.map((product, index) => (

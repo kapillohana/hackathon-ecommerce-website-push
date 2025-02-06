@@ -1,16 +1,13 @@
 "use client";
 import { useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
-  const { cart } = useCart();
-  const { isSignedIn } = useUser();
+ 
 
   return (
     <div>

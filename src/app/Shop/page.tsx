@@ -1,21 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import ShopPage from "@/components/ShopPage";
 
 const Shop = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [selectedCategory, ] = useState<string | undefined>(undefined);
 
   // Handle category change
-  const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value === "all" ? undefined : value);
-  };
+  // const handleCategoryChange = (value: string) => {
+  //   setSelectedCategory(value === "all" ? undefined : value);
+  // };
 
   return (
     <div className="container mx-auto px-4">
@@ -33,7 +27,7 @@ const Shop = () => {
      
 
       {/* Product Grid */}
-      <ShopPage _selectedCategory={selectedCategory} />
+      <ShopPage selectedCategory={selectedCategory} />
 
     </div>
   );

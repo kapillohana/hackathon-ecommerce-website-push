@@ -48,7 +48,8 @@ const SignInPage = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <span className="text-gray-600">Don't have an account? </span>
+          <span className="text-gray-600"><p>Don&apos;t have an account?</p>
+          </span>
           <button 
             onClick={() => router.push("/sign-up")}
             className="text-[#FF7A28] font-semibold hover:text-[#FF4C00] transition-colors"

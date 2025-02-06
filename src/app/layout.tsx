@@ -7,10 +7,6 @@ import Footer from "@/components/Footer";
 import { GlobalProvider } from "./GlobalProvider";
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 
 // Importing local fonts

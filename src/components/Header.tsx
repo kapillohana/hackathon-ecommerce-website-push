@@ -22,15 +22,12 @@ const Header = () => {
         </div>
 
         {/* Large Screen Navigation Links */}
-        <div className="hidden lg:flex gap-14 text-black font-medium ">
+        <div className="hidden lg:flex gap-14 text-black font-semibold">
           <Link href="/" className="cursor-pointer hover:underline hover:text-[#B88E2F] ">
             Home
           </Link>
           <Link href="/Shop" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
             Shop
-          </Link>
-          <Link href="/" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
-            About
           </Link>
           <Link href="/blogs" className="cursor-pointer hover:underline hover:text-[#B88E2F]">
             Blogs

@@ -4,7 +4,6 @@ import { useCart } from "../../../context/CartContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/clerk-react"; // Clerk import
-import { RedirectToSignIn } from "@clerk/nextjs";
 
 interface ShippingInfo {
   name: string;

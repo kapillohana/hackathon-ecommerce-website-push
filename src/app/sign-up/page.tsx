@@ -3,11 +3,9 @@
 import { SignUp } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const SignUpPage = () => {
   const router = useRouter();
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="min-h-screen bg-white flex justify-center items-center py-12 px-6 sm:px-8 relative">
